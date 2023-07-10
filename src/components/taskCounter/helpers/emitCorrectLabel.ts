@@ -6,10 +6,10 @@ export const emitCorrectLabel = (
 ): string => {
   switch (status) {
     case Status.todo:
-      return `할 일`;
+      return `할 일🔥`;
     case Status.inProgress:
-      return '진행중';
+      return '진행중⌚';
     case Status.completed:
-      return '완료';
+      return '완료🎉';
   }
 };

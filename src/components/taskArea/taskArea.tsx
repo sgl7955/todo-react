@@ -10,10 +10,11 @@ import { Task } from '../task/task';
 
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { useQuery } from 'react-query';
+import { useQuery, useMutation } from 'react-query';
 import { sendApiRequest } from '../../helpers/sendApiRequest';
 import { ITaskApi } from './interfaces/ITaskApi';
 import { Status } from '../createTaskForm/enums/Status';
+import { IUpdateTask } from '../createTaskForm/interfaces/IUpdateTask';
 
 export const TaskArea: FC = (): ReactElement => {
   const { error, isLoading, data, refetch } = useQuery(
@@ -24,6 +25,16 @@ export const TaskArea: FC = (): ReactElement => {
         'GET',
       );
     },
+  );
+
+  // update taask mutation
+  const updateTaskMutation = useMutation(
+    (data: IUpdateTask) =>
+      sendApiRequest(
+        'http://localhost:3200/tasks',
+        'PUT',
+        data,
+      ),
   );
 
   return (

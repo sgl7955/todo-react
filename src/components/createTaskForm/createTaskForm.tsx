@@ -7,7 +7,12 @@ import {
   Alert,
   AlertTitle,
 } from '@mui/material';
-import React, { FC, ReactElement, useState } from 'react';
+import React, {
+  FC,
+  ReactElement,
+  useState,
+  useEffect,
+} from 'react';
 import { useMutation } from 'react-query';
 
 import { TaskDescriptionField } from './_taskDescriptionField';
@@ -33,6 +38,8 @@ export const CreateTaskForm: FC = (): ReactElement => {
   const [priority, setPriority] = useState<string>(
     Priority.normal,
   );
+  const [showSuccess, setShowSuccess] =
+    useState<boolean>(false);
 
   // Create task mutation
   const createTaskMutation = useMutation(
@@ -59,6 +66,21 @@ export const CreateTaskForm: FC = (): ReactElement => {
     createTaskMutation.mutate(task);
   }
 
+  // Manage Side Effects inside the application
+  useEffect(() => {
+    if (createTaskMutation.isSuccess) {
+      setShowSuccess(true);
+    }
+
+    const successTimeout = setTimeout(() => {
+      setShowSuccess(false);
+    }, 7000);
+
+    return () => {
+      clearTimeout(successTimeout);
+    };
+  }, [createTaskMutation.isSuccess]);
+
   return (
     <Box
       display="flex"
@@ -68,13 +90,15 @@ export const CreateTaskForm: FC = (): ReactElement => {
       px={4}
       my={6}
     >
-      <Alert
-        severity="success"
-        sx={{ width: '100%', marginBottom: '16px' }}
-      >
-        <AlertTitle>Success</AlertTitle>
-        작업이 성공적으로 추가되었습니다😃
-      </Alert>
+      {showSuccess && (
+        <Alert
+          severity="success"
+          sx={{ width: '100%', marginBottom: '16px' }}
+        >
+          <AlertTitle>Success</AlertTitle>
+          작업이 성공적으로 추가되었습니다😃
+        </Alert>
+      )}
 
       <Typography mb={2} component="h2" variant="h6">
         작업 만들기

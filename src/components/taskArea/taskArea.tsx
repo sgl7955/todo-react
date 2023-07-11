@@ -1,4 +1,9 @@
-import { Box, Grid } from '@mui/material';
+import {
+  Box,
+  Grid,
+  Alert,
+  LinearProgress,
+} from '@mui/material';
 import React, { FC, ReactElement } from 'react';
 import { TaskCounter } from '../taskCounter/taskCounter';
 import { Task } from '../task/task';
@@ -54,9 +59,25 @@ export const TaskArea: FC = (): ReactElement => {
           xs={10}
           md={8}
         >
-          <Task id="123" />
-          <Task id="123" />
-          <Task id="123" />
+          <>
+            {error && (
+              <Alert severity="error">
+                data를 fetch 중 error가 있습니다
+              </Alert>
+            )}
+
+            {!error &&
+              Array.isArray(data) &&
+              data.length === 0 && (
+                <Alert severity="warning">
+                  아직 어떤 작업도 있지 않습니다. 작업을
+                  추가하세요!
+                </Alert>
+              )}
+            <Task id="123" />
+            <Task id="123" />
+            <Task id="123" />
+          </>
         </Grid>
       </Grid>
     </Grid>

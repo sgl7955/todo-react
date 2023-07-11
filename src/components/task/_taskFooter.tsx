@@ -32,7 +32,7 @@ export const TaskFooter: FC<ITaskFooter> = (
         label="진행중"
         control={
           <Switch
-            onChange={(e) => onStatusChange(e)}
+            onChange={(e) => onStatusChange(e, id)}
             color="warning"
             defaultChecked={status === Status.inProgress}
           />
@@ -43,7 +43,7 @@ export const TaskFooter: FC<ITaskFooter> = (
         color="success"
         size="small"
         sx={{ color: '#ffffff' }}
-        onClick={(e) => onClick(e)}
+        onClick={(e) => onClick(e, id)}
       >
         완료👏
       </Button>

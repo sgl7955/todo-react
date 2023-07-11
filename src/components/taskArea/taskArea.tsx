@@ -74,9 +74,26 @@ export const TaskArea: FC = (): ReactElement => {
                   추가하세요!
                 </Alert>
               )}
-            <Task id="123" />
-            <Task id="123" />
-            <Task id="123" />
+
+            {isLoading ? (
+              <LinearProgress />
+            ) : (
+              Array.isArray(data) &&
+              data.length > 0 &&
+              data.map((each, index) => {
+                return (
+                  <Task
+                    key={index + each.priority}
+                    id={each.id}
+                    title={each.title}
+                    date={new Date(each.date)}
+                    description={each.description}
+                    priority={each.priority}
+                    status={each.status}
+                  />
+                );
+              })
+            )}
           </>
         </Grid>
       </Grid>

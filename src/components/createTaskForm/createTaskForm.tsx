@@ -8,6 +8,7 @@ import {
   AlertTitle,
 } from '@mui/material';
 import React, { FC, ReactElement, useState } from 'react';
+import { useMutation } from 'react-query';
 
 import { TaskDescriptionField } from './_taskDescriptionField';
 import { TaskTitleField } from './_taskTitleField';
@@ -15,6 +16,8 @@ import { TaskDateField } from './_taskDateField';
 import { TaskSelectField } from './_taskSelectField';
 import { Status } from './enums/Status';
 import { Priority } from './enums/Priority';
+import { sendApiRequest } from '../../helpers/sendApiRequest';
+import { ICreateTask } from '../taskArea/interfaces/ICreateTask';
 
 export const CreateTaskForm: FC = (): ReactElement => {
   // declare components states
@@ -30,6 +33,31 @@ export const CreateTaskForm: FC = (): ReactElement => {
   const [priority, setPriority] = useState<string>(
     Priority.normal,
   );
+
+  // Create task mutation
+  const createTaskMutation = useMutation(
+    (data: ICreateTask) =>
+      sendApiRequest(
+        'http://localhost:3200/tasks',
+        'POST',
+        data,
+      ),
+  );
+
+  function createTaskHandler() {
+    if (!title || !date || !description) {
+      return;
+    }
+
+    const task: ICreateTask = {
+      title,
+      description,
+      date: date.toString(),
+      status,
+      priority,
+    };
+    createTaskMutation.mutate(task);
+  }
 
   return (
     <Box
@@ -55,13 +83,16 @@ export const CreateTaskForm: FC = (): ReactElement => {
       <Stack sx={{ width: '100%' }} spacing={2}>
         <TaskTitleField
           onChange={(e) => setTitle(e.target.value)}
+          disabled={createTaskMutation.isLoading}
         />
         <TaskDescriptionField
           onChange={(e) => setDescription(e.target.value)}
+          disabled={createTaskMutation.isLoading}
         />
         <TaskDateField
           value={date}
           onChange={(date) => setDate(date)}
+          disabled={createTaskMutation.isLoading}
         />
         <Stack
           sx={{ width: '100%' }}
@@ -72,6 +103,7 @@ export const CreateTaskForm: FC = (): ReactElement => {
             label="Status"
             name="status"
             value={status}
+            disabled={createTaskMutation.isLoading}
             onChange={(e) =>
               setStatus(e.target.value as string)
             }
@@ -90,6 +122,7 @@ export const CreateTaskForm: FC = (): ReactElement => {
             label="Priority"
             name="priority"
             value={priority}
+            disabled={createTaskMutation.isLoading}
             onChange={(e) =>
               setPriority(e.target.value as string)
             }
@@ -109,8 +142,20 @@ export const CreateTaskForm: FC = (): ReactElement => {
             ]}
           />
         </Stack>
-        <LinearProgress />
-        <Button variant="contained" size="large" fullWidth>
+        {createTaskMutation.isLoading && <LinearProgress />}
+        <Button
+          disabled={
+            !title ||
+            !description ||
+            !date ||
+            !status ||
+            !priority
+          }
+          onClick={createTaskHandler}
+          variant="contained"
+          size="large"
+          fullWidth
+        >
           작업 추가
         </Button>
       </Stack>

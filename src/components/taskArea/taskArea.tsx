@@ -54,9 +54,9 @@ export const TaskArea: FC = (): ReactElement => {
           xs={10}
           md={8}
         >
-          <Task />
-          <Task />
-          <Task />
+          <Task id="123" />
+          <Task id="123" />
+          <Task id="123" />
         </Grid>
       </Grid>
     </Grid>

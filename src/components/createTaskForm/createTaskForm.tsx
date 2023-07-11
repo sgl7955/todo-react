@@ -1,4 +1,12 @@
-import { Box, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Stack,
+  Typography,
+  LinearProgress,
+  Button,
+  Alert,
+  AlertTitle,
+} from '@mui/material';
 import React, { FC, ReactElement, useState } from 'react';
 
 import { TaskDescriptionField } from './_taskDescriptionField';
@@ -32,6 +40,14 @@ export const CreateTaskForm: FC = (): ReactElement => {
       px={4}
       my={6}
     >
+      <Alert
+        severity="success"
+        sx={{ width: '100%', marginBottom: '16px' }}
+      >
+        <AlertTitle>Success</AlertTitle>
+        작업이 성공적으로 추가되었습니다😃
+      </Alert>
+
       <Typography mb={2} component="h2" variant="h6">
         작업 만들기
       </Typography>
@@ -93,11 +109,11 @@ export const CreateTaskForm: FC = (): ReactElement => {
             ]}
           />
         </Stack>
+        <LinearProgress />
+        <Button variant="contained" size="large" fullWidth>
+          작업 추가
+        </Button>
       </Stack>
-
-      {/*Task Date*/}
-      {/*Task Status*/}
-      {/*Task Priority*/}
     </Box>
   );
 };
